@@ -1,5 +1,5 @@
 [package]
-name = "tealdbg_launcher"
+name = "tealdbg"
 version = "0.1.0"
 edition = "2018"
 

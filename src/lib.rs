@@ -42,7 +42,8 @@ pub fn launch<T: AsRef<Path>>(
     for t in txns {
         bytes.push(t.to_msg_pack()?);
     }
-    fs::write("./output.tx", bytes.concat())?;
+    let txns_file = Path::new(config.output_files_dir).join("output.tx");
+    fs::write(txns_file.clone(), bytes.concat())?;
 
     let dump_file = Path::new(config.output_files_dir).join("dr.msgp");
 
@@ -51,7 +52,7 @@ pub fn launch<T: AsRef<Path>>(
         .arg("clerk")
         .arg("dryrun")
         .arg("-t")
-        .arg(Path::new(config.output_files_dir).join("output.tx"))
+        .arg(txns_file)
         .arg("--dryrun-dump")
         .arg("-o")
         .arg(dump_file.clone());
@@ -60,13 +61,9 @@ pub fn launch<T: AsRef<Path>>(
         dump_command.arg("-d").arg(node_dir);
     }
 
-    let dump_exit_status = dump_command
-        .status()
-        .expect("context file generation failed");
+    println!("dump status: {:?}", dump_command.status()?);
 
-    println!("dump status: {:?}", dump_exit_status);
-
-    let tealdbg_stdout = Command::new(config.tealdbg_command)
+    let tealdbg_stderr = Command::new(config.tealdbg_command)
         .arg("debug")
         .arg(program_path.as_ref())
         .arg("-d")
@@ -76,7 +73,7 @@ pub fn launch<T: AsRef<Path>>(
         .stderr
         .ok_or_else(|| "Error capturing stderr")?;
 
-    BufReader::new(tealdbg_stdout)
+    BufReader::new(tealdbg_stderr)
         .lines()
         .filter_map(|line| line.ok())
         .for_each(|line| println!("{}", line));
