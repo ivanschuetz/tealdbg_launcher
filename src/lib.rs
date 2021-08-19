@@ -10,18 +10,20 @@ use algonaut::{core::ToMsgPack, transaction::SignedTransaction};
 
 pub struct Config<'a> {
     pub goal_command: &'a str, // override with `sandbox goal` or `<path>/goal`
-    pub output_files_dir: &'a str,
-    pub node_dir: Option<&'a str>, // node directory, if not using ALGORAND_DATA
     pub tealdbg_command: &'a str,
+    pub node_dir: Option<&'a str>, // node directory, if not using ALGORAND_DATA
+    pub output_files_dir: &'a str,
+    pub delete_output_files: bool,
 }
 
 impl<'a> Default for Config<'a> {
     fn default() -> Self {
         Config {
             goal_command: "goal",
-            output_files_dir: ".",
-            node_dir: None,
             tealdbg_command: "tealdbg",
+            node_dir: None,
+            output_files_dir: ".",
+            delete_output_files: true,
         }
     }
 }
@@ -52,7 +54,7 @@ pub fn launch<T: AsRef<Path>>(
         .arg("clerk")
         .arg("dryrun")
         .arg("-t")
-        .arg(txns_file)
+        .arg(txns_file.clone())
         .arg("--dryrun-dump")
         .arg("-o")
         .arg(dump_file.clone());
@@ -67,7 +69,7 @@ pub fn launch<T: AsRef<Path>>(
         .arg("debug")
         .arg(program_path.as_ref())
         .arg("-d")
-        .arg(dump_file)
+        .arg(dump_file.clone())
         .stderr(Stdio::piped())
         .spawn()?
         .stderr
@@ -77,6 +79,11 @@ pub fn launch<T: AsRef<Path>>(
         .lines()
         .filter_map(|line| line.ok())
         .for_each(|line| println!("{}", line));
+
+    if config.delete_output_files {
+        fs::remove_file(txns_file)?;
+        fs::remove_file(dump_file)?;
+    }
 
     Ok(())
 }
