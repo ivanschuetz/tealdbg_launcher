@@ -4,6 +4,11 @@
 
 Start the [TEAL debugger](https://developer.algorand.org/docs/features/asc1/debugging/#using-the-teal-debugger) from Rust.
 
+Cargo.toml:
+```
+tealdbg = { git = "https://github.com/ivanschuetz/tealdbg_launcher" }
+```
+
 Insert this where you want to debug smart contract calls:
 
 ```rust
