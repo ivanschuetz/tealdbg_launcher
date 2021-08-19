@@ -73,7 +73,7 @@ pub fn launch<T: AsRef<Path>>(
         .stderr(Stdio::piped())
         .spawn()?
         .stderr
-        .ok_or_else(|| "Error capturing stderr")?;
+        .ok_or("Error capturing stderr")?;
 
     BufReader::new(tealdbg_stderr)
         .lines()

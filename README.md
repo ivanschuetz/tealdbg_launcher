@@ -1,5 +1,7 @@
 # tealdbg_launcher
 
+![Build](https://github.com/ivanschuetz/tealdbg_launcher/actions/workflows/actions.yml/badge.svg)
+
 Start the [TEAL debugger](https://developer.algorand.org/docs/features/asc1/debugging/#using-the-teal-debugger) from Rust.
 
 Insert this where you want to debug smart contract calls:
