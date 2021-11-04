@@ -9,8 +9,8 @@ use std::{
 use algonaut::{core::ToMsgPack, transaction::SignedTransaction};
 
 pub struct Config<'a> {
-    pub goal_command: &'a str, // override with `sandbox goal` or `<path>/goal`
-    pub tealdbg_command: &'a str,
+    pub goal_command: &'a str,     // override with `<path>/goal` if not in path
+    pub tealdbg_command: &'a str,  // override with `<path>/tealdbg` if not in path
     pub node_dir: Option<&'a str>, // node directory, if not using ALGORAND_DATA
     pub output_files_dir: &'a str,
     pub delete_output_files: bool,

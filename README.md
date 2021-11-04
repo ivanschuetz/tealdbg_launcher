@@ -30,3 +30,5 @@ tealdbg::launch(
     "approval.teal",
 )
 ```
+
+⚠️ Sandbox is not supported! If you need it, please open an issue.
