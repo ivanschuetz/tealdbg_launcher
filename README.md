@@ -18,17 +18,16 @@ tealdbg::launch_default(
 )
 ```
 
-To [override defaults](https://github.com/ivanschuetz/tealdbg_launcher/blob/12538a4522b8dcfb21484217429e09f503f0837b/src/lib.rs#L11):
-
+To override defaults:
 ```rust
 tealdbg::launch(
     Config {
-        node_dir: Some("<node dir>"),
+        mode: tealdbg::Mode::Sandbox {
+            command: "<path>/sandbox",
+        }
         ..Config::default()
     },
     &[my_tx1, my_tx2],
     "approval.teal",
 )
 ```
-
-⚠️ Sandbox is not supported! If you need it, please open an issue.
